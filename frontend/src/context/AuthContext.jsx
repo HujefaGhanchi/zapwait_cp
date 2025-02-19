@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from '../utils/axios';
+import axios from 'axios';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,8 +12,8 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('/api/auth/me', {  // Changed endpoint
-            headers: { Authorization: `Bearer ${token}` } // Fixed syntax
+          const response = await axios.get('http://localhost:9000/api/auth/check', {
+            headers: { Authorization: `Bearer ${token}` }
           });
           setUser(response.data);
         } catch (error) {
@@ -28,35 +29,35 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post('http://localhost:9000/api/auth/login', { email, password });
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
     } catch (error) {
+      console.error('Login Error:', error.response ? error.response.data : error.message);
       throw new Error(error.response?.data?.message || 'Invalid credentials');
     }
   };
 
   const register = async (name, email, password, role) => {
     try {
-      console.log('Sending Signup Request:', { name, email, password, role }); // ✅ Log request data
-  
-      const response = await axios.post('/api/auth/Signup', {
+      console.log('Sending Signup Request:', { name, email, password, role });
+
+      const response = await axios.post('http://localhost:9000/api/auth/Signup', {
         name,
         email,
         password,
         role
       });
-  
-      console.log('Signup Successful:', response.data); // ✅ Log success response
-  
+
+      console.log('Signup Successful:', response.data);
+
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
     } catch (error) {
-      console.error('Signup Error:', error.response ? error.response.data : error.message); // ✅ Log exact error
-      alert(error.response?.data?.message || 'Registration failed'); // ✅ Show actual error to user
+      console.error('Signup Error:', error.response ? error.response.data : error.message);
+      alert(error.response?.data?.message || 'Registration failed');
     }
   };
-  
 
   const logout = () => {
     localStorage.removeItem('token');
