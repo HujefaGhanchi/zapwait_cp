@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../utils/axios';
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,11 +11,12 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('/api/users/profile', {
-            headers: { Authorization: `Bearer ${token}` }
+          const response = await axios.get('/api/auth/me', {  // Changed endpoint
+            headers: { Authorization: `Bearer ${token}` } // Fixed syntax
           });
           setUser(response.data);
         } catch (error) {
+          console.error('Auth check failed:', error.response?.data?.message || error.message);
           localStorage.removeItem('token');
         }
       }
@@ -32,24 +32,31 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
     } catch (error) {
-      throw new Error('Invalid credentials');
+      throw new Error(error.response?.data?.message || 'Invalid credentials');
     }
   };
 
   const register = async (name, email, password, role) => {
     try {
-      const response = await axios.post('/api/auth/register', {
+      console.log('Sending Signup Request:', { name, email, password, role }); // ✅ Log request data
+  
+      const response = await axios.post('/api/auth/Signup', {
         name,
         email,
         password,
         role
       });
+  
+      console.log('Signup Successful:', response.data); // ✅ Log success response
+  
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
     } catch (error) {
-      throw new Error('Registration failed');
+      console.error('Signup Error:', error.response ? error.response.data : error.message); // ✅ Log exact error
+      alert(error.response?.data?.message || 'Registration failed'); // ✅ Show actual error to user
     }
   };
+  
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -65,8 +72,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};

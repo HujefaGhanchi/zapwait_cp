@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ServiceBrowser from './pages/ServiceBrowser';
 import BookingPage from './pages/BookingPage';
@@ -18,6 +19,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/services" element={<ServiceBrowser />} />
             <Route path="/booking/:businessId" element={<BookingPage />} />
