@@ -27,7 +27,7 @@ const Signup = () => {
 
     try {
       await register(formData.name, formData.email, formData.password, formData.role);
-      navigate('/dashboard'); // Redirect to dashboard after successful signup
+      navigate('/login'); // Redirect to dashboard after successful signup
     } catch (err) {
       setError(err.message);
     } finally {
