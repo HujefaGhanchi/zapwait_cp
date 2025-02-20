@@ -27,14 +27,17 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      const response = await axios.post('http://localhost:9000/api/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
+      const response = await axios.post('http://localhost:9000/api/auth/login', {
+        username,
+        password
+      });
+      // Handle successful login
+      console.log('Login successful:', response.data);
     } catch (error) {
+      // Handle login error
       console.error('Login Error:', error.response ? error.response.data : error.message);
-      throw new Error(error.response?.data?.message || 'Invalid credentials');
     }
   };
 
