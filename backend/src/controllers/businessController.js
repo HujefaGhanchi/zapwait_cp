@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Business from '../models/Business';
 
-export const createBusiness = async (req: Request, res: Response) => {
+export const createBusiness = async (req, res) => {
   try {
     const business = await Business.create({
       ...req.body,
@@ -13,7 +13,7 @@ export const createBusiness = async (req: Request, res: Response) => {
   }
 };
 
-export const getBusinesses = async (req: Request, res: Response) => {
+export const getBusinesses = async (req, res) => {
   try {
     const businesses = await Business.find({})
       .populate('owner', 'name email');
@@ -23,7 +23,7 @@ export const getBusinesses = async (req: Request, res: Response) => {
   }
 };
 
-export const updateBusiness = async (req: Request, res: Response) => {
+export const updateBusiness = async (req, res) => {
   try {
     const business = await Business.findByIdAndUpdate(
       req.params.id,
