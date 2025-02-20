@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 // Compare entered password with stored password
 // userSchema.methods.matchPassword = async function (enteredPassword) {
 //   return bcrypt.compare(enteredPassword, this.password);
-// }; Double Time Hashing
+// }; 
 
 const User = mongoose.model('User', userSchema);
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Booking from '../models/Booking';
 
-export const createBooking = async (req: Request, res: Response) => {
+export const createBooking = async (req, res) => {
   try {
     const { businessId, serviceDetails, dateTime } = req.body;
     const customerId = req.user._id; // Assuming we have auth middleware
@@ -19,7 +19,7 @@ export const createBooking = async (req: Request, res: Response) => {
   }
 };
 
-export const getCustomerBookings = async (req: Request, res: Response) => {
+export const getCustomerBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ customer: req.user._id })
       .populate('business')
@@ -30,7 +30,7 @@ export const getCustomerBookings = async (req: Request, res: Response) => {
   }
 };
 
-export const updateBookingStatus = async (req: Request, res: Response) => {
+export const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const booking = await Booking.findByIdAndUpdate(
