@@ -7,14 +7,17 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log(email,password)
 
   try {
     const user = await User.findOne({ email });
+    console.log(user,user.password)
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(isMatch)
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -29,7 +32,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/Signup', async (req, res) => {
   const { name, email, password, role } = req.body;
-
+  console.log(name,email,password,role)
   try {
     let user = await User.findOne({ email });
     if (user) {
